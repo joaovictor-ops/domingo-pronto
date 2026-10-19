@@ -8,7 +8,14 @@
 <meta name="robots" content="noindex, nofollow"><!-- RASCUNHO: remover noindex só quando JV autorizar a publicação -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-<!-- PIXEL DA META: inserir aqui somente depois que JV criar a conta de anúncios e autorizar. -->
+<!-- Pixel da Meta · P001 — Domingo Pronto (dataset 1445537464173207). InitiateCheckout e Purchase são disparados pela Kiwify no checkout. -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1445537464173207');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent', {content_name: 'Domingo Pronto', content_ids: ['P001'], content_type: 'product', value: 19.90, currency: 'BRL'});
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1445537464173207&ev=PageView&noscript=1"/></noscript>
 <style>
 :root{--navy:#1F3A5F;--sun:#F2B134;--cream:#FFF8EC;--coral:#D9614A;--green:#23877B;--ink:#1F2A36;--muted:#4B5563}
 *{box-sizing:border-box}
@@ -157,7 +164,7 @@ footer{background:#F5F5F5;padding:26px 0 40px;font-size:14px;color:var(--muted)}
 
 <footer><div class="wrap">
   <div class="brand" style="font-size:16px;margin-bottom:10px"><span class="lg" id="logo2"></span>Domingo Pronto</div>
-  <p>Produto digital (PDF). O pagamento e a entrega são feitos pela Kiwify. Esta página não tem formulário e não pede seus dados; ela carrega fontes do Google Fonts.</p>
+  <p>Produto digital (PDF). O pagamento e a entrega são feitos pela Kiwify. Esta página não tem formulário e não pede seus dados. Ela usa o Pixel da Meta para medir os resultados dos anúncios e carrega fontes do Google Fonts.</p>
   <p>Responsável: João Victor Casali.</p>
   <p>Contato: <a href="mailto:joaovictor+P001@rglogistica.com.br">joaovictor+P001@rglogistica.com.br</a></p>
   <p>© 2026 Domingo Pronto. Ilustrações, textos e atividades originais.</p>
@@ -178,7 +185,18 @@ function checkoutLink() {
   return CHECKOUT_URL + (CHECKOUT_URL.indexOf('?') >= 0 ? '&' : '?') + out.toString();
 }
 Array.prototype.forEach.call(document.querySelectorAll('a.cta'), function (a) {
-  if (CHECKOUT_URL) { a.href = checkoutLink(); }
+  if (CHECKOUT_URL) {
+    a.href = checkoutLink();
+    // Evento próprio do clique para o checkout (não usa InitiateCheckout para não duplicar o evento da Kiwify).
+    // Espera 300 ms antes de sair da página para o evento ter tempo de ser enviado.
+    a.addEventListener('click', function (e) {
+      if (!window.fbq) return;
+      e.preventDefault();
+      var href = a.href;
+      fbq('trackCustom', 'CliqueCheckout', {content_ids: ['P001'], value: 19.90, currency: 'BRL'});
+      setTimeout(function () { window.location.href = href; }, 300);
+    });
+  }
   else { a.addEventListener('click', function (e) { e.preventDefault(); alert('Rascunho: o checkout ainda não foi configurado.'); }); }
 });
 </script>
